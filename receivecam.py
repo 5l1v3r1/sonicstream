@@ -28,6 +28,7 @@ class CamReceiver:
     def run(self):
         buffer_queue = deque(['']*4)
         filestream = None
+        written = 0
         while True:
             data, addr = self._sock.recvfrom(2**14)
             
@@ -44,8 +45,13 @@ class CamReceiver:
                     filestream = None
                     cv2.imshow('image', cv2.imread(self._temp_image_file))
                     thread.start_new_thread(cv2.waitKey, (0,))
+                    written = 0
                 elif filestream is not None:
+                    if written >= 2**14:
+                        print "too much data, screw this kthxbai"
+                        quit()
                     filestream.write(char)
+                    written += 1
 
 if __name__ == "__main__":
     camreceiver = CamReceiver(args.ip, args.port)
