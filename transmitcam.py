@@ -29,11 +29,11 @@ class CamTransmitter:
         self._framesize = framesize
         self._fps = fps
 
+        self._capture = cv.CaptureFromCAM(0)
         self._udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def _capture_webcam_frame(self):
-        capture = cv.CaptureFromCAM(0)
-        img = cv.QueryFrame(capture)
+        img = cv.QueryFrame(self._capture)
 
         thumbnail = cv.CreateImage(self._framesize, img.depth,
             img.nChannels)
