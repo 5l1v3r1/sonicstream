@@ -18,6 +18,7 @@ argparser.add_argument("--fps", default=1, type=int,
 
 args = argparser.parse_args()
 
+
 class CamTransmitter:
 
     _temp_image_file = "/tmp/goatse.jpg"
