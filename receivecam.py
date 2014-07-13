@@ -1,5 +1,6 @@
 import argparse
 from collections import deque
+import thread
 import socket
 
 import cv2
@@ -42,7 +43,7 @@ class CamReceiver:
                     filestream.close()
                     filestream = None
                     cv2.imshow('image', cv2.imread(self._temp_image_file))
-                    cv2.waitKey(1000)
+                    thread.start_new_thread(cv2.waitKey, (0,))
                 elif filestream is not None:
                     filestream.write(char)
 
