@@ -19,6 +19,8 @@ argparser.add_argument("--fps", default=1, type=int,
 args = argparser.parse_args()
 
 class CamTransmitter:
+
+    _temp_image_file = "/tmp/goatse.jpg"
     
     def __init__(self, ip, port, framesize, fps):
         self._ip = ip
@@ -40,7 +42,10 @@ class CamTransmitter:
         return thumbnail
 
     def _blast_image(self, image):
-        self._send_udp_message(image.tostring())
+        cv.SaveImage(self._temp_image_file, image)
+        filestream = open(self._temp_image_file, 'r')
+        self._send_udp_message(filestream.read())
+        filestream.close()
 
     def _send_udp_message(self, message):
         return self._udp_sock.sendto(message, (self._ip, self._port))
